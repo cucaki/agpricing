@@ -27,7 +27,7 @@ def get_bonuses():
             "Gyomfelismerés és gyom eloszlási térkép",
             "Térképes jelentés",
             "Gyorsaság (eredmények a repülés napján)",
-            "PDF-riportok ",
+            "PDF-riportok",
             "Vetési hibák feltérképezése",
             "Útmutató Prescription Map feltöltéséhez"
         ],
@@ -70,12 +70,14 @@ st.write(f"**Teljes ár: {total_price:.2f} EUR**")
 
 # Add bonuses as a separate section
 st.write("---")
-st.subheader("Átjárásonkénti Bónuszok (Ingyenes)")
+st.subheader("Átjárásonkénti Bónuszok")
 bonuses = get_bonuses()
 cols = st.columns(3)  # Create 3 columns for the bonuses
 for idx, (col, (pass_num, bonus_list)) in enumerate(zip(cols, bonuses.items()), start=1):
     with col:
         st.write(f"**{pass_num}× Átjárás**")
+        if pass_num > 1:
+            st.write("Minden korábbi bónusz +")
         for bonus in bonus_list:
             st.write(f"- {bonus}")
 
