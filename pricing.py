@@ -24,23 +24,23 @@ def get_bonuses():
     """Return the bonuses for all passes."""
     bonuses = {
         1: [
-            "Gyomfelismerés és gyom eloszlási térkép (ingyenes)",
-            "Térképes jelentés (ingyenes)",
-            "Gyorsaság (eredmények a repülés napján, ingyenes)",
+            "Gyomfelismerés és gyom eloszlási térkép",
+            "Térképes jelentés",
+            "Gyorsaság (eredmények a repülés napján)",
             "PDF-riportok (ingyenes)",
-            "Vetési hibák feltérképezése (ingyenes)",
-            "Útmutató Prescription Map feltöltéséhez (ingyenes)"
+            "Vetési hibák feltérképezése",
+            "Útmutató Prescription Map feltöltéséhez"
         ],
         2: [
             "Tőszámlálás (ingyenes)",
-            "Terméshozam-előrejelzés (ingyenes)",
-            "Kárjelentés biztosítóknak (ingyenes)"
+            "Terméshozam-előrejelzés",
+            "Kárjelentés biztosítóknak"
         ],
         3: [
-            "Vízelvezetési problémák feltérképezése (ingyenes)",
-            "Komplex riport csomag (ingyenes)",
-            "RTK-támogatás (ingyenes)",
-            "Értelmezési támogatás a gyakorlatban (ingyenes)"
+            "Vízelvezetési problémák feltérképezése",
+            "Komplex riport csomag",
+            "RTK-támogatás",
+            "Értelmezési támogatás a gyakorlatban"
         ]
     }
     return bonuses
