@@ -68,6 +68,11 @@ for i in range(num_fields):
 st.subheader("Összesített ár")
 st.write(f"**Teljes ár: {total_price:.2f} EUR**")
 
+# Add main service
+st.write("---")
+st.subheader("Fő Szolgáltatás")
+st.write("**Kihagyott címerek felismerése** minden átjárással!")
+
 # Add bonuses as a separate section
 st.write("---")
 st.subheader("Átjárásonkénti Bónuszok")
