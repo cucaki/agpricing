@@ -27,12 +27,12 @@ def get_bonuses():
             "Gyomfelismerés és gyom eloszlási térkép",
             "Térképes jelentés",
             "Gyorsaság (eredmények a repülés napján)",
-            "PDF-riportok (ingyenes)",
+            "PDF-riportok ",
             "Vetési hibák feltérképezése",
             "Útmutató Prescription Map feltöltéséhez"
         ],
         2: [
-            "Tőszámlálás (ingyenes)",
+            "Tőszámlálás",
             "Terméshozam-előrejelzés",
             "Kárjelentés biztosítóknak"
         ],
