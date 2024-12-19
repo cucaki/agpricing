@@ -12,6 +12,7 @@ LANGUAGES = {
         "total_price": "**Összesen: {:.2f} EUR**",
         "summary_price": "Összesített ár",
         "final_price": "**Teljes ár: {:.2f} EUR**",
+        "total_area": "Teljes terület: {:.2f} hektár",
         "bonuses": "Átjárásonkénti Bónuszok (Ingyenes)",
         "contact": "Kapcsolat",
         "contact_info": (
@@ -20,7 +21,8 @@ LANGUAGES = {
             "📞 +36 30 720 8887\n"
             "📧 imregyaraki@agroglance.com"
         ),
-        "passes_labels": ["1× Átjárás", "2× Átjárás", "3× Átjárás"]
+        "passes_labels": ["1× Átjárás", "2× Átjárás", "3× Átjárás"],
+        "website": "Látogasson el a weboldalunkra: [agroglance.com/hu](https://agroglance.com/hu)"
     },
     "English": {
         "title": "AgroGlance Calculator",
@@ -32,6 +34,7 @@ LANGUAGES = {
         "total_price": "**Total: {:.2f} EUR**",
         "summary_price": "Total Price",
         "final_price": "**Grand Total: {:.2f} EUR**",
+        "total_area": "Total Area: {:.2f} hectares",
         "bonuses": "Bonuses by Pass (Free)",
         "contact": "Contact",
         "contact_info": (
@@ -40,7 +43,8 @@ LANGUAGES = {
             "📞 +36 30 720 8887\n"
             "📧 imregyaraki@agroglance.com"
         ),
-        "passes_labels": ["1× Pass", "2× Passes", "3× Passes"]
+        "passes_labels": ["1× Pass", "2× Passes", "3× Passes"],
+        "website": "Visit our website: [agroglance.com](https://agroglance.com)"
     }
 }
 
@@ -95,8 +99,12 @@ def get_bonuses():
 
 st.title(lang["title"])
 
+# Display website link prominently
+st.markdown(f"### {lang['website']}")
+
 num_fields = st.number_input(lang["num_fields"], min_value=1, step=1)
 total_price = 0
+total_area = 0
 
 for i in range(num_fields):
     st.subheader(lang["field_data"].format(i + 1))
@@ -112,9 +120,11 @@ for i in range(num_fields):
         st.write(f"- {idx}. {lang['passes_labels'][idx-1]}: {price:.2f} EUR")
     st.write(lang["total_price"].format(field_total))
     total_price += field_total
+    total_area += area
 
 st.subheader(lang["summary_price"])
 st.write(lang["final_price"].format(total_price))
+st.write(lang["total_area"].format(total_area))
 
 # Add bonuses as a separate section
 st.write("---")
