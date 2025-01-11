@@ -22,7 +22,9 @@ LANGUAGES = {
             "📧 imregyaraki@agroglance.com"
         ),
         "passes_labels": ["1× Átjárás", "2× Átjárás", "3× Átjárás"],
-        "website": "Látogasson el a weboldalunkra: [agroglance.com/hu](https://agroglance.com/hu)"
+        "website": "Látogasson el a weboldalunkra: [agroglance.com/hu](https://agroglance.com/hu)",
+        "global_passes_title": "Átjárások számának beállítása minden földre egyszerre",
+        "prices_excl_vat": "**A feltüntetett árak nem tartalmazzák az ÁFÁt.**"
     },
     "English": {
         "title": "AgroGlance Calculator",
@@ -44,7 +46,9 @@ LANGUAGES = {
             "📧 imregyaraki@agroglance.com"
         ),
         "passes_labels": ["1× Pass", "2× Passes", "3× Passes"],
-        "website": "Visit our website: [agroglance.com](https://agroglance.com)"
+        "website": "Visit our website: [agroglance.com](https://agroglance.com)",
+        "global_passes_title": "Set Number of Passes for All Fields at Once",
+        "prices_excl_vat": "**The indicated prices do not include VAT.**"
     }
 }
 
@@ -98,13 +102,12 @@ def get_bonuses():
     return bonuses
 
 st.title(lang["title"])
-# Display website link prominently
 st.markdown(f"### {lang['website']}")
 
 num_fields = st.number_input(lang["num_fields"], min_value=1, step=1)
 
-# --- ADD THIS SECTION FOR A "GLOBAL PASSES" SELECTOR ---
-st.subheader("Set Number of Passes (Átjárások) for All Fields at Once")
+# --- Global Passes Selector (Bilingual) ---
+st.subheader(lang["global_passes_title"])
 global_pass_selection = st.radio(
     label=lang["passes"], 
     options=[1, 2, 3], 
@@ -112,59 +115,79 @@ global_pass_selection = st.radio(
     key="global_pass_selection"
 )
 if st.button("Apply Passes to All Fields"):
-    # Once clicked, store the selected value in each field's session state
     for i in range(num_fields):
         st.session_state[f"passes_{i}"] = global_pass_selection
-# --------------------------------------------------------
+# -----------------------------------------
 
 total_price = 0
 total_area = 0
 
-# Main loop through fields
 for i in range(num_fields):
     st.subheader(lang["field_data"].format(i + 1))
     
-    # Field area
-    area = st.number_input(lang["area_size"], key=f"area_{i}", min_value=0.1, step=0.1)
+    # Area widget
+    if f"area_{i}" not in st.session_state:
+        st.session_state[f"area_{i}"] = 0.1  # or any default you prefer
     
-    # Field passes (read from session_state if it’s there, otherwise default = 1)
-    default_passes = st.session_state.get(f"passes_{i}", 1)
+    area = st.number_input(
+        lang["area_size"], 
+        key=f"area_{i}", 
+        min_value=0.1, 
+        step=0.1
+    )
+    
+    # Passes widget
+    if f"passes_{i}" not in st.session_state:
+        st.session_state[f"passes_{i}"] = 1  # default passes if none set
+    
     passes = st.selectbox(
         lang["passes"], 
         [1, 2, 3],
-        index=[1,2,3].index(default_passes),  # ensures the selectbox shows the correct default
-        key=f"passes_{i}"
+        key=f"passes_{i}"  # NO 'index=' argument to avoid the warning
     )
     
-    # Calculate price for this field
+    # Calculate price
     prices, field_total = calculate_price_per_field(area, passes)
     
-    # Display detailed pricing
+    # Show per-pass pricing
     st.write(lang["pricing"])
     for idx, price in enumerate(prices, start=1):
         st.write(f"- {idx}. {lang['passes_labels'][idx-1]}: {price:.2f} EUR")
+    
+    # Show total for this field
     st.write(lang["total_price"].format(field_total))
     
+    # Show cost per hectare for this field
+    if area > 0:
+        cost_per_hectare = field_total / area
+        st.write(f"**{cost_per_hectare:.2f} EUR/hectare**")
+
     total_price += field_total
     total_area += area
 
 # Summary
 st.subheader(lang["summary_price"])
 st.write(lang["final_price"].format(total_price))
+if total_area > 0:
+    st.write(f"**{total_price / total_area:.2f} EUR/hectare**")
+
 st.write(lang["total_area"].format(total_area))
 
-# Bonuses section
+# Prices do not include VAT
+st.write(lang["prices_excl_vat"])
+
+# Bonuses
 st.write("---")
 st.subheader(lang["bonuses"])
 bonuses = get_bonuses()
-cols = st.columns(3)  # Create 3 columns for the bonuses
+cols = st.columns(3)
 for idx, (col, (pass_num, bonus_list)) in enumerate(zip(cols, bonuses.items()), start=1):
     with col:
         st.write(f"**{lang['passes_labels'][pass_num - 1]}**")
         for bonus in bonus_list:
             st.write(f"- {bonus}")
 
-# Contact information
+# Contact
 st.write("---")
 st.subheader(lang["contact"])
 st.write(lang["contact_info"])
