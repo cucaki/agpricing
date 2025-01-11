@@ -7,7 +7,7 @@ LANGUAGES = {
         "num_fields": "Hány földdel rendelkezik, vagy szeretné használni a szolgáltatást?",
         "field_data": "{}. föld adatai",
         "area_size": "Területméret (hektár):",
-        "checks_label": "Ellenőrzések / Inspekciók száma:",
+        "checks_label": "Ellenőrzések száma:",
         "pricing": "### Árak ellenőrzésenként:",
         "total_price": "**Összesen: {:.2f} EUR**",
         "summary_price": "Összesített ár",
