@@ -98,18 +98,43 @@ def get_bonuses():
     return bonuses
 
 st.title(lang["title"])
-
 # Display website link prominently
 st.markdown(f"### {lang['website']}")
 
 num_fields = st.number_input(lang["num_fields"], min_value=1, step=1)
+
+# --- ADD THIS SECTION FOR A "GLOBAL PASSES" SELECTOR ---
+st.subheader("Set Number of Passes (Átjárások) for All Fields at Once")
+global_pass_selection = st.radio(
+    label=lang["passes"], 
+    options=[1, 2, 3], 
+    horizontal=True,
+    key="global_pass_selection"
+)
+if st.button("Apply Passes to All Fields"):
+    # Once clicked, store the selected value in each field's session state
+    for i in range(num_fields):
+        st.session_state[f"passes_{i}"] = global_pass_selection
+# --------------------------------------------------------
+
 total_price = 0
 total_area = 0
 
+# Main loop through fields
 for i in range(num_fields):
     st.subheader(lang["field_data"].format(i + 1))
+    
+    # Field area
     area = st.number_input(lang["area_size"], key=f"area_{i}", min_value=0.1, step=0.1)
-    passes = st.selectbox(lang["passes"], [1, 2, 3], key=f"passes_{i}")
+    
+    # Field passes (read from session_state if it’s there, otherwise default = 1)
+    default_passes = st.session_state.get(f"passes_{i}", 1)
+    passes = st.selectbox(
+        lang["passes"], 
+        [1, 2, 3],
+        index=[1,2,3].index(default_passes),  # ensures the selectbox shows the correct default
+        key=f"passes_{i}"
+    )
     
     # Calculate price for this field
     prices, field_total = calculate_price_per_field(area, passes)
@@ -119,14 +144,16 @@ for i in range(num_fields):
     for idx, price in enumerate(prices, start=1):
         st.write(f"- {idx}. {lang['passes_labels'][idx-1]}: {price:.2f} EUR")
     st.write(lang["total_price"].format(field_total))
+    
     total_price += field_total
     total_area += area
 
+# Summary
 st.subheader(lang["summary_price"])
 st.write(lang["final_price"].format(total_price))
 st.write(lang["total_area"].format(total_area))
 
-# Add bonuses as a separate section
+# Bonuses section
 st.write("---")
 st.subheader(lang["bonuses"])
 bonuses = get_bonuses()
