@@ -23,8 +23,10 @@ LANGUAGES = {
         ),
         "checks_labels": ["1× Ellenőrzés", "2× Ellenőrzés", "3× Ellenőrzés"],
         "website": "Látogasson el a weboldalunkra: [agroglance.com/hu](https://agroglance.com/hu)",
-        "global_passes_title": "Átjárások számának beállítása az összes földre",
-        "prices_excl_vat": "**A feltüntetett árak nem tartalmazzák az ÁFÁt.**",
+        # Updated Hungarian heading for "global passes" => checks/inspections
+        "global_passes_title": "Ellenőrzések / Inspekciók számának beállítása az összes földre",
+        # Emphasize NEM for VAT
+        "prices_excl_vat": "**A feltüntetett árak **NEM** tartalmazzák az ÁFÁt.**",
         "bonuses_dict": {
             1: [
                 "Gyomfelismerés és eloszlási térkép (ingyenes)",
@@ -68,9 +70,10 @@ LANGUAGES = {
         ),
         "checks_labels": ["1× Check", "2× Checks", "3× Checks"],
         "website": "Visit our website: [agroglance.com](https://agroglance.com)",
-        # Changed to "Set Number of Passes for All Fields"
-        "global_passes_title": "Set Number of Passes for All Fields",
-        "prices_excl_vat": "**The indicated prices do not include VAT.**",
+        # Updated English heading
+        "global_passes_title": "Set Number of Checks/Inspections for All Fields",
+        # Emphasize DO NOT for VAT
+        "prices_excl_vat": "**The indicated prices **DO NOT** include VAT.**",
         "bonuses_dict": {
             1: [
                 "Weed detection and distribution map (free)",
@@ -95,9 +98,10 @@ LANGUAGES = {
     }
 }
 
+
 def calculate_price_per_field(area, checks):
     """
-    Calculate the price for each check/inspection on a single field 
+    Calculate the price for each check/inspection on a single field
     and return the detailed breakdown.
     """
     prices = [0, 0, 0]
@@ -110,16 +114,13 @@ def calculate_price_per_field(area, checks):
         prices = [500 + (area - 5) * 50, 240 + (area - 5) * 24, 110 + (area - 5) * 6]
     else:
         prices = [
-            750 + (area - 10) * 30, 
-            360 + (area - 10) * 18, 
+            750 + (area - 10) * 30,
+            360 + (area - 10) * 18,
             140 + (area - 10) * 7
         ]
     
     total_price = sum(prices[:checks])
     return prices[:checks], total_price
-
-# Remove the extra top-level title so we only have the language-specific one
-# st.title("AgroGlance Calculator")  # (Removed)
 
 # Let user pick language in the sidebar
 language_choice = st.sidebar.selectbox("Choose Language / Válasszon nyelvet", ["English", "Hungarian"])
@@ -135,7 +136,7 @@ num_fields = st.number_input(lang["num_fields"], min_value=1, step=1)
 # --- Global Checks/Inspections Selector ---
 st.subheader(lang["global_passes_title"])
 global_pass_selection = st.radio(
-    label=lang["checks_label"], 
+    label=lang["checks_label"],
     options=[1, 2, 3],
     index=2,  # default=3 checks
     horizontal=True,
@@ -162,15 +163,15 @@ for i in range(num_fields):
     
     # Field size
     area = st.number_input(
-        lang["area_size"], 
-        key=f"area_{i}", 
-        min_value=0.1, 
+        lang["area_size"],
+        key=f"area_{i}",
+        min_value=0.1,
         step=0.1
     )
     
     # Number of checks/inspections
     checks = st.selectbox(
-        lang["checks_label"], 
+        lang["checks_label"],
         [1, 2, 3],
         key=f"checks_{i}"
     )
@@ -186,14 +187,25 @@ for i in range(num_fields):
     # Display total cost for this field
     st.write(lang["total_price"].format(field_total))
     
-    # Show cost per hectare (total) and per hectare per check
+    # Show cost breakdown
     if area > 0:
         cost_per_hectare_total = field_total / area
         cost_per_hectare_per_check = cost_per_hectare_total / checks
-        st.write(
-            f"**{cost_per_hectare_per_check:.2f} EUR/hectare per check** "
-            f"({cost_per_hectare_total:.2f} EUR/hectare total)"
-        )
+        
+        if language_choice == "Hungarian":
+            # Hungarian version
+            # e.g.: 26.11 EUR/hektár ellenőrzésenként (78.33 EUR/hektár összesen)
+            st.write(
+                f"**{cost_per_hectare_per_check:.2f} EUR/hektár ellenőrzésenként** "
+                f"({cost_per_hectare_total:.2f} EUR/hektár összesen)"
+            )
+        else:
+            # English version
+            # e.g.: 26.11 EUR/hectare per check (78.33 EUR/hectare total)
+            st.write(
+                f"**{cost_per_hectare_per_check:.2f} EUR/hectare per check** "
+                f"({cost_per_hectare_total:.2f} EUR/hectare total)"
+            )
     
     total_price += field_total
     total_area += area
@@ -202,9 +214,13 @@ for i in range(num_fields):
 st.subheader(lang["summary_price"])
 st.write(lang["final_price"].format(total_price))
 if total_area > 0:
-    # Different fields can have different # checks, so we only show total EUR/hectare
+    # Show average total cost per hectare (we can't strictly do "per check" across fields
+    # since each field can have different # checks)
     avg_cost_per_hectare = total_price / total_area
-    st.write(f"**{avg_cost_per_hectare:.2f} EUR/hectare total**")
+    if language_choice == "Hungarian":
+        st.write(f"**{avg_cost_per_hectare:.2f} EUR/hektár összesen**")
+    else:
+        st.write(f"**{avg_cost_per_hectare:.2f} EUR/hectare total**")
 
 st.write(lang["total_area"].format(total_area))
 
