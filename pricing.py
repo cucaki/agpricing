@@ -24,7 +24,7 @@ LANGUAGES = {
         "checks_labels": ["1× Ellenőrzés", "2× Ellenőrzés", "3× Ellenőrzés"],
         "website": "Látogasson el a weboldalunkra: [agroglance.com/hu](https://agroglance.com/hu)",
         # Updated Hungarian heading for "global passes" => checks/inspections
-        "global_passes_title": "Ellenőrzések / Inspekciók számának beállítása az összes földre",
+        "global_passes_title": "Ellenőrzések számának beállítása az összes földre",
         # Emphasize NEM for VAT
         "prices_excl_vat": "**A feltüntetett árak **NEM** tartalmazzák az ÁFÁt.**",
         "bonuses_dict": {
